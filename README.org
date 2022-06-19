@@ -1,6 +1,4 @@
 #+title: Nikki Tools
-
-* Nikki Tools
 This is a repository of tools I created to datamine [[https://nikki4.playpapergames.com/m/home][Shining Nikki]], with a kind of tutorial of how to mine the assets.
 
 * How-to
