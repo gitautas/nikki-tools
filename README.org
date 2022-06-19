@@ -1,0 +1,26 @@
+#+title: Nikki Tools
+
+* Nikki Tools
+This is a repository of tools I created to datamine [[https://nikki4.playpapergames.com/m/home][Shining Nikki]], with a kind of tutorial of how to mine the assets.
+
+* How-to
+** Prerequisites
+I did all of this on two machines, a Linux machine and a windows machine, the parts for which I needed the windows machine is Bluestacks and Asset Studio was struggling to work with wine, it worked fine for a while but eventually started printing errors about files that were too large. I decided to try it on windows and since it worked I didn't bother, but it is 100% doable on Linux, AssetStudio is open source so figuring out a solution wouldn't be that difficult.
+
+- To download the required patches you're going to need an android emulator, I used [[https://www.bluestacks.com/][Bluestacks]] on Windows, I haven't tried simply running android in QEMU but it might work.
+- To mount the resulting image in Linux you're gonna need [[https://libguestfs.org/][libguestfs tools]], on ubuntu this can be installed with =sudo apt install libguestfs-tools=
+- For running the scripts you're going to need =python3=
+- To dump the assets you're going to need [[https://github.com/Perfare/AssetStudio][Asset Studio]]
+
+** Process
+- So the first process is to install all of the pre-requisites and download the game on your android emulator, after logging in you want to download all of the available patches by pressing this icon: [[./images/1.png]] and waiting until all downloads are finished.
+- Afterwards you want to navigate to the android system image, on windows it was ~X:\ProgramData\Bluestacks-nxt\Engine\x\Data.vhdx~, you can mount this filesystem with sudo mkdir =/mnt/nikki &&sudo guestmount --add Data.vhdx -o uid=500,gid=users,nounix -m /dev/sda1 /mnt/nikki=
+- Afterwards I recommend copying the required files from the image to your local disk, but this is optional. =sudo cp /mnt/nikki/media/0/Android/data/com.papegames.nn4.en/files/DownloadedBundle/art ./nikki_assets=
+- Clone this repo into the directory where you copied your assets. =git clone git@github.com:gitautas/nikki-tools.git=
+- Run the =header_strip.py= script, which strips the first 8 bytes of every unity asset file, since they are padded with nonsense values for some reason.
+- Now your assets should be readable by AssetStudio, so open AS, select =File->Open folder= and select your directory.
+- After indexing them all it should be able to find a lot of assets, from here you can do whatever you want with them, but in my use case I filter them by mesh and export them all as .obj files.
+- This step is optional but if you want to merge the common models (models that were split up into different meshes) you can run the =merge_obj.py= script inside your exported directory.
+
+
+I don't expect this to be useful to many people so this is more to document the process in case I want to 3D print more nikki models 🤷
